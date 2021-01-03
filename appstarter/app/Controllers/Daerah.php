@@ -28,13 +28,34 @@ class Daerah extends Controller
 
     public function save()
     {
-        $daerah = new Model_Daerah();
-        $slug = $this->generate_url_slug($this->request->getVar('nama_daerah'), 'daerah', 'slug_daerah');
-        $daerah->save([
-            'nama_daerah' => $this->request->getVar('nama_daerah'),
-            'ongkos' => $this->request->getVar('ongkos'),
-            'slug_daerah' => $slug,
-        ]);
+        //validasi
+        if (!$this->validate([
+            'nama_daerah' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Nama Daerah Harus Diisi dengan Benar.',
+                ],
+            ],
+            'ongkos' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Ongkos Harus Diisi dengan Benar.',
+                ],
+            ],
+        ])) {
+            $validation = \Config\Services::validation();
+
+            return redirect()->to(base_url() . '/admin/daerah/create')->withInput()->with('error', $validation->getErrors());
+        } else {
+            $daerah = new Model_Daerah();
+            $slug = $this->generate_url_slug($this->request->getVar('nama_daerah'), 'daerah', 'slug_daerah');
+            $daerah->save([
+                'nama_daerah' => $this->request->getVar('nama_daerah'),
+                'ongkos' => $this->request->getVar('ongkos'),
+                'slug_daerah' => $slug,
+            ]);
+        }
+
         return redirect()->to('/admin/daerah');
     }
 
@@ -51,14 +72,34 @@ class Daerah extends Controller
 
     public function update($id)
     {
-        $jenis = new Model_Daerah();
-        $slug = $this->generate_url_slug($this->request->getVar('nama_daerah'), 'daerah', 'slug_daerah');
-        $jenis->save([
-            'daerah_id' => $id,
-            'nama_daerah' => $this->request->getVar('nama_daerah'),
-            'ongkos' => $this->request->getVar('ongkos'),
-            'slug_daerah' => $slug,
-        ]);
+        //validasi
+        if (!$this->validate([
+            'nama_daerah' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Nama Daerah Harus Diisi dengan Benar.',
+                ],
+            ],
+            'ongkos' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Ongkos Harus Diisi dengan Benar.',
+                ],
+            ],
+        ])) {
+            $validation = \Config\Services::validation();
+            return redirect()->back()->withInput()->with('error', $validation->getErrors());
+        } else {
+            $jenis = new Model_Daerah();
+            $slug = $this->generate_url_slug($this->request->getVar('nama_daerah'), 'daerah', 'slug_daerah');
+            $jenis->save([
+                'daerah_id' => $id,
+                'nama_daerah' => $this->request->getVar('nama_daerah'),
+                'ongkos' => $this->request->getVar('ongkos'),
+                'slug_daerah' => $slug,
+            ]);
+        }
+
         return redirect()->to('/admin/daerah');
     }
 

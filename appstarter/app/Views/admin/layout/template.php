@@ -46,6 +46,9 @@
 </head>
 
 <body>
+    <?php
+    $uri = service('uri');
+    ?>
     <div class="wrapper">
         <div class="sidebar" data-active-color="rose" data-background-color="black" data-image="<?php echo base_url(); ?>/mdb/assets/img/sidebar-1.jpg">
             <!--
@@ -70,23 +73,26 @@
                     </div>
                     <div class="info">
                         <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                            Administrator
+                            <?= session()->get('nama_lengkap'); ?>
                             <b class="caret"></b>
                         </a>
                         <div class="collapse" id="collapseExample">
                             <ul class="nav">
-                                <li>
-                                    <a href="#">Profile</a>
+                                <li class="<?= ($uri->getSegment(1) == 'admin' &&  $uri->getSegment(2) == 'user' ? 'active' : null) ?>">
+                                    <a href="/admin/user/edit-profile">Edit Profile</a>
                                 </li>
                                 <li>
-                                    <a href="#">Logout</a>
+                                    <form action="/logout" method="POST">
+                                        <button type="submit" hidden id="logoutButton"></button>
+                                    </form>
+                                    <a href="#" id="logoutAnchor">Logout</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <ul class="nav">
-                    <li class="">
+                    <li class="<?= ($uri->getSegment(1) == 'admin' &&  $uri->getSegment(2) == '' ? 'active' : null) ?>">
                         <a href="<?php echo base_url(); ?>/admin">
                             <i class="material-icons">dashboard</i>
                             <p>Dashboard</p>
@@ -119,13 +125,13 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="">
+                    <li class="<?= ($uri->getSegment(1) == 'admin' &&  $uri->getSegment(2) == 'menu' ? 'active' : null) ?>">
                         <a href="<?php echo base_url(); ?>/admin/menu">
                             <i class="material-icons">local_cafe</i>
                             <p>Menu</p>
                         </a>
                     </li>
-                    <li class="">
+                    <li class="<?= ($uri->getSegment(1) == 'admin' &&  $uri->getSegment(2) == 'daerah' ? 'active' : null) ?>">
                         <a href="<?php echo base_url(); ?>/admin/daerah">
                             <i class="material-icons">map</i>
                             <p>Daerah</p>
@@ -149,8 +155,8 @@
                             <p>Secret Menu</p>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="<?php echo base_url(); ?>">
+                    <li class="<?= ($uri->getSegment(1) == 'admin' &&  $uri->getSegment(2) == 'pegawai' ? 'active' : null) ?>">
+                        <a href="<?php echo base_url(); ?>/admin/pegawai">
                             <i class="fa fa-users" aria-hidden="true"></i>
                             <p>Pegawai</p>
                         </a>
@@ -347,7 +353,13 @@
 <!-- <script src="<?php echo base_url(); ?>/mdb/assets/js/demo.js"></script> -->
 <?= $this->renderSection('script'); ?>
 <script type="text/javascript">
+    $(document).ready(function() {
+        $("#logoutAnchor").on("click", logout);
 
+        function logout() {
+            $('#logoutButton').click();
+        }
+    });
 </script>
 
 

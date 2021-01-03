@@ -31,30 +31,47 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/admin', 'Dashboard::index');
+$routes->get('/login', 'Auth::login');
+$routes->post('/login', 'Auth::prosesLogin');
+$routes->post('/logout', 'Auth::logout');
 
-$routes->get('/admin/menu', 'Jenis_Menu::index');
-$routes->post('/admin/menu/delete', 'Jenis_Menu::delete');
-$routes->get('/admin/menu/create', 'Jenis_Menu::create');
-$routes->get('/admin/menu/edit/(:segment)', 'Jenis_Menu::edit/$1');
-$routes->post('/admin/menu/update/(:segment)', 'Jenis_Menu::update/$1');
-$routes->post('/admin/menu/save', 'Jenis_Menu::save');
+$routes->get('admin/user/edit-profile', 'Auth::profile', ['filter' => 'auth']);
+$routes->post('admin/user/edit-profile', 'Auth::editProfile', ['filter' => 'auth']);
+$routes->post('admin/user/edit-password', 'Auth::editPassword', ['filter' => 'auth']);
 
-
-$routes->get('/admin/menu/(:segment)', 'Menu::index/$1');
-$routes->get('/admin/menu/(:segment)/create', 'Menu::create/$1');
-$routes->post('/admin/menu/(:segment)/save', 'Menu::save');
-$routes->post('/admin/menu/(:segment)/delete', 'Menu::delete');
-$routes->get('/admin/menu/(:segment)/edit/(:segment)', 'Menu::edit/$1/$2');
-$routes->post('/admin/menu/(:segment)/update/(:segment)', 'Menu::update/$1/$2');
+$routes->get('/admin/pegawai', 'Pegawai::index', ['filter' => 'auth']);
+$routes->get('/admin/pegawai/create', 'Pegawai::create', ['filter' => 'auth']);
+$routes->post('/admin/pegawai/save', 'Pegawai::save', ['filter' => 'auth']);
+$routes->get('/admin/pegawai/edit/(:segment)', 'Pegawai::edit/$1', ['filter' => 'auth']);
+$routes->post('/admin/pegawai/update/(:segment)', 'Pegawai::update/$1', ['filter' => 'auth']);
+$routes->post('/admin/pegawai/delete', 'Pegawai::delete', ['filter' => 'auth']);
 
 
-$routes->get('/admin/daerah', 'Daerah::index');
-$routes->post('/admin/daerah/delete', 'Daerah::delete');
-$routes->get('/admin/daerah/create', 'Daerah::create');
-$routes->post('/admin/daerah/save', 'Daerah::save');
-$routes->get('/admin/daerah/edit/(:segment)', 'Daerah::edit/$1');
-$routes->post('/admin/daerah/update/(:segment)', 'Daerah::update/$1');
+
+$routes->get('/admin', 'Dashboard::index', ['filter' => 'auth']);
+
+$routes->get('/admin/menu', 'Jenis_Menu::index', ['filter' => 'auth']);
+$routes->post('/admin/menu/delete', 'Jenis_Menu::delete', ['filter' => 'auth']);
+$routes->get('/admin/menu/create', 'Jenis_Menu::create', ['filter' => 'auth']);
+$routes->get('/admin/menu/edit/(:segment)', 'Jenis_Menu::edit/$1', ['filter' => 'auth']);
+$routes->post('/admin/menu/update/(:segment)', 'Jenis_Menu::update/$1', ['filter' => 'auth']);
+$routes->post('/admin/menu/save', 'Jenis_Menu::save', ['filter' => 'auth']);
+
+
+$routes->get('/admin/menu/(:segment)', 'Menu::index/$1', ['filter' => 'auth']);
+$routes->get('/admin/menu/(:segment)/create', 'Menu::create/$1', ['filter' => 'auth']);
+$routes->post('/admin/menu/(:segment)/save', 'Menu::save', ['filter' => 'auth']);
+$routes->post('/admin/menu/(:segment)/delete', 'Menu::delete', ['filter' => 'auth']);
+$routes->get('/admin/menu/(:segment)/edit/(:segment)', 'Menu::edit/$1/$2', ['filter' => 'auth']);
+$routes->post('/admin/menu/(:segment)/update/(:segment)', 'Menu::update/$1/$2', ['filter' => 'auth']);
+
+
+$routes->get('/admin/daerah', 'Daerah::index', ['filter' => 'auth']);
+$routes->post('/admin/daerah/delete', 'Daerah::delete', ['filter' => 'auth']);
+$routes->get('/admin/daerah/create', 'Daerah::create', ['filter' => 'auth']);
+$routes->post('/admin/daerah/save', 'Daerah::save', ['filter' => 'auth']);
+$routes->get('/admin/daerah/edit/(:segment)', 'Daerah::edit/$1', ['filter' => 'auth']);
+$routes->post('/admin/daerah/update/(:segment)', 'Daerah::update/$1', ['filter' => 'auth']);
 
 
 

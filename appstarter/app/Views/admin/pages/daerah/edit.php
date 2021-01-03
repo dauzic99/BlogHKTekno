@@ -11,7 +11,11 @@
                     </div>
                     <h4 class="card-title">Edit Daerah</h4>
                     <div class="card-content">
-
+                        <?php
+                        $error = array();
+                        if (session()->get('error')) {
+                            $error = session()->get('error');
+                        } ?>
                         <form method="POST" action="/admin/daerah/update/<?= $daerah['daerah_id']; ?>" class="form-horizontal">
                             <?= csrf_field(); ?>
                             <input type="hidden" name="slug" value="<?= $daerah['slug_daerah']; ?>">
@@ -20,20 +24,20 @@
                                     <div class="row">
                                         <label class="col-sm-2 label-on-left">Nama Daerah</label>
                                         <div class="col-sm-10">
-                                            <div class="form-group label-floating is-empty">
+                                            <div class="form-group label-floating is-empty <?= (array_key_exists('nama_daerah', $error)) ? 'has-error' : ''; ?>">
                                                 <label class="control-label"></label>
                                                 <input type="text" class="form-control" name="nama_daerah" value="<?= $daerah['nama_daerah']; ?>">
-                                                <span class="help-block">Nama Daerah Tempat Tinggal.</span>
+                                                <span class="help-block"><?= (array_key_exists('nama_daerah', $error)) ? $error['nama_daerah'] : 'Nama Daerah Pengantaran.'; ?></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-2 label-on-left">Ongkos</label>
                                         <div class="col-sm-10">
-                                            <div class="form-group label-floating is-empty">
+                                            <div class="form-group label-floating is-empty <?= (array_key_exists('ongkos', $error)) ? 'has-error' : ''; ?>">
                                                 <label class="control-label">Rp</label>
                                                 <input type="number" class="form-control" name="ongkos" inputmode="numeric" value="<?= $daerah['ongkos']; ?>">
-                                                <span class="help-block">Ongkos Pengantaran Pesanan ke Daerah Tersebut.</span>
+                                                <span class="help-block"><?= (array_key_exists('ongkos', $error)) ? $error['ongkos'] : 'Ongkos Pengantaran Pesanan ke Daerah Tersebut.'; ?></span>
                                             </div>
                                         </div>
                                     </div>

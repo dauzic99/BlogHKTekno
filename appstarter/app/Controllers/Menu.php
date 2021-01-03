@@ -38,26 +38,57 @@ class Menu extends Controller
     {
         $jenis = new Model_JenisMenu();
         $menu = new Model_Menu();
-
-        $slug = $this->generate_url_slug($this->request->getVar('nama_menu'), 'menu', 'slug_menu');
         $folder = $jenis->where('jenis_menu_id', $this->request->getVar('jenis_menu_id'))->first();
-        //ambil gambar
-        $gambarMenu = $this->request->getFile('foto');
-        $newName = $slug . '' . $gambarMenu->getRandomName();
-        $gambarMenu->move('image/menu/' . $folder['slug_jenis'], $newName);
+        //validasi
+        if (!$this->validate([
+            'nama_menu' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Nama Menu Harus Diisi dengan Benar.',
+                ],
+            ],
+            'deskripsi' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Deskripsi Harus Diisi dengan Benar.',
+                ],
+            ],
+            'harga' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Harga Harus Diisi dengan Benar.',
+                ],
+            ],
+            'foto' => [
+                'rules' => 'uploaded[foto]',
+                'errors' => [
+                    'uploaded' => 'Foto Harus Diupload dengan Benar.',
 
+                ],
+            ],
+        ])) {
+            $validation = \Config\Services::validation();
 
+            return redirect()->to(base_url() . '/admin/menu/' . $folder['slug_jenis'] . '/create')->withInput()->with('error', $validation->getErrors());
+        } else {
+            $slug = $this->generate_url_slug($this->request->getVar('nama_menu'), 'menu', 'slug_menu');
 
-        $menu->save([
-            'nama_menu' => $this->request->getVar('nama_menu'),
-            'slug_menu' => $slug,
-            'deskripsi' => $this->request->getVar('deskripsi'),
-            'harga' => $this->request->getVar('harga'),
-            'foto' => $newName,
-            'jenis_menu_id' => $this->request->getVar('jenis_menu_id'),
-            'created_at' => Time::now(),
-            'updated_at' => Time::now(),
-        ]);
+            //ambil gambar
+            $gambarMenu = $this->request->getFile('foto');
+            $newName = $slug . '' . $gambarMenu->getRandomName();
+            $gambarMenu->move('image/menu/' . $folder['slug_jenis'], $newName);
+
+            $menu->save([
+                'nama_menu' => $this->request->getVar('nama_menu'),
+                'slug_menu' => $slug,
+                'deskripsi' => $this->request->getVar('deskripsi'),
+                'harga' => $this->request->getVar('harga'),
+                'foto' => $newName,
+                'jenis_menu_id' => $this->request->getVar('jenis_menu_id'),
+                'created_at' => Time::now(),
+                'updated_at' => Time::now(),
+            ]);
+        }
         return redirect()->to('/admin/menu/' . $folder['slug_jenis']);
     }
 
@@ -83,39 +114,65 @@ class Menu extends Controller
         $type = $jenis->where('jenis_menu_id', $id_jenis)->first();
         $slug_jenis = $type['slug_jenis'];
         $slug = $this->generate_url_slug($this->request->getVar('nama_menu'), 'menu', 'slug_menu');
+        //validasi
+        if (!$this->validate([
+            'nama_menu' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Nama Menu Harus Diisi dengan Benar.',
+                ],
+            ],
+            'deskripsi' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Deskripsi Harus Diisi dengan Benar.',
+                ],
+            ],
+            'harga' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Harga Harus Diisi dengan Benar.',
+                ],
+            ],
+        ])) {
+            $validation = \Config\Services::validation();
 
-        if ($this->request->getFile('foto')->isReadable()) {
-            //hapus file gambar sebelumnya di directory
-            $path = 'image/menu/' . $type['nama_jenis'] . '/' . $menus['foto'];
-            unlink($path);
-
-            $folder = $jenis->where('jenis_menu_id', $id_jenis)->first();
-            //ambil gambar
-            $gambarMenu = $this->request->getFile('foto');
-            $newName = $slug . '' . $gambarMenu->getRandomName();
-            $gambarMenu->move('image/menu/' . $folder['slug_jenis'], $newName);
-
-            $menu->save([
-                'menu_id' => $id_menu,
-                'jenis_menu_id' => $id_jenis,
-                'nama_menu' => $this->request->getVar('nama_menu'),
-                'slug_menu' => $slug,
-                'deskripsi' => $this->request->getVar('deskripsi'),
-                'harga' => $this->request->getVar('harga'),
-                'foto' => $newName,
-                'updated_at' => Time::now(),
-            ]);
+            return redirect()->back()->withInput()->with('error', $validation->getErrors());
         } else {
-            $menu->save([
-                'menu_id' => $id_menu,
-                'jenis_menu_id' => $id_jenis,
-                'nama_menu' => $this->request->getVar('nama_menu'),
-                'slug_menu' => $slug,
-                'deskripsi' => $this->request->getVar('deskripsi'),
-                'harga' => $this->request->getVar('harga'),
-                'updated_at' => Time::now(),
-            ]);
+            if ($this->request->getFile('foto')->isReadable()) {
+                //hapus file gambar sebelumnya di directory
+                $path = 'image/menu/' . $type['nama_jenis'] . '/' . $menus['foto'];
+                unlink($path);
+
+                $folder = $jenis->where('jenis_menu_id', $id_jenis)->first();
+                //ambil gambar
+                $gambarMenu = $this->request->getFile('foto');
+                $newName = $slug . '' . $gambarMenu->getRandomName();
+                $gambarMenu->move('image/menu/' . $folder['slug_jenis'], $newName);
+
+                $menu->save([
+                    'menu_id' => $id_menu,
+                    'jenis_menu_id' => $id_jenis,
+                    'nama_menu' => $this->request->getVar('nama_menu'),
+                    'slug_menu' => $slug,
+                    'deskripsi' => $this->request->getVar('deskripsi'),
+                    'harga' => $this->request->getVar('harga'),
+                    'foto' => $newName,
+                    'updated_at' => Time::now(),
+                ]);
+            } else {
+                $menu->save([
+                    'menu_id' => $id_menu,
+                    'jenis_menu_id' => $id_jenis,
+                    'nama_menu' => $this->request->getVar('nama_menu'),
+                    'slug_menu' => $slug,
+                    'deskripsi' => $this->request->getVar('deskripsi'),
+                    'harga' => $this->request->getVar('harga'),
+                    'updated_at' => Time::now(),
+                ]);
+            }
         }
+
 
         return redirect()->to('/admin/menu/' . $slug_jenis);
     }

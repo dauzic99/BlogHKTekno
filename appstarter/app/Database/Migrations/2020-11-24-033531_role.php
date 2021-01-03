@@ -4,32 +4,29 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class JenisMenuMigration extends Migration
+class Role extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'jenis_menu_id'  => [
+            'role_id'  => [
                 'type'           => 'INT',
                 'constraint'     => 8,
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'nama_jenis'     => [
+            'nama_role'     => [
                 'type'           => 'VARCHAR',
                 'constraint'     => '255',
             ],
-            'slug_jenis'     => [
-                'type'           => 'VARCHAR',
-                'constraint'     => '255',
-            ],
+
         ]);
-        $this->forge->addKey('jenis_menu_id', true);
-        $this->forge->createTable('jenis_menu');
+        $this->forge->addKey('role_id', true);
+        $this->forge->createTable('role');
     }
 
     public function down()
     {
-        $this->forge->dropTable('jenis_menu');
+        $this->forge->dropTable('role');
     }
 }

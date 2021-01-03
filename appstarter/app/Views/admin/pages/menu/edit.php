@@ -11,7 +11,11 @@
                     </div>
                     <h4 class="card-title">Edit <?= $jenis['nama_jenis']; ?></h4>
                     <div class="card-content">
-
+                        <?php
+                        $error = array();
+                        if (session()->get('error')) {
+                            $error = session()->get('error');
+                        } ?>
                         <form method="POST" action="/admin/menu/<?= $jenis['jenis_menu_id']; ?>/update/<?= $menu['menu_id']; ?>" class="form-horizontal" enctype="multipart/form-data">
                             <?= csrf_field(); ?>
                             <input type="hidden" name="menu_id" value="<?= $menu['menu_id']; ?>">
@@ -20,30 +24,30 @@
                                     <div class="row">
                                         <label class="col-sm-2 label-on-left">Nama Menu</label>
                                         <div class="col-sm-10">
-                                            <div class="form-group label-floating is-empty">
+                                            <div class="form-group label-floating is-empty <?= (array_key_exists('nama_menu', $error)) ? 'has-error' : ''; ?>">
                                                 <label class="control-label"></label>
                                                 <input type="text" class="form-control" name="nama_menu" value="<?= $menu['nama_menu']; ?>">
-                                                <span class="help-block">Nama Menu.</span>
+                                                <span class="help-block"><?= (array_key_exists('nama_menu', $error)) ? $error['nama_menu'] : 'Nama Menu.'; ?></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-2 label-on-left">Deskripsi</label>
                                         <div class="col-sm-10">
-                                            <div class="form-group label-floating is-empty">
+                                            <div class="form-group label-floating is-empty <?= (array_key_exists('deskripsi', $error)) ? 'has-error' : ''; ?>">
                                                 <label class="control-label"></label>
                                                 <textarea name="deskripsi" class="form-control" cols="30" rows="5"><?= $menu['deskripsi']; ?></textarea>
-                                                <span class="help-block">Deskripsi singkat tentang menu.</span>
+                                                <span class="help-block"><?= (array_key_exists('deskripsi', $error)) ? $error['deskripsi'] : 'Deskripsi singkat tentang menu.'; ?></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-2 label-on-left">Harga</label>
                                         <div class="col-sm-10">
-                                            <div class="form-group label-floating is-empty">
+                                            <div class="form-group label-floating is-empty <?= (array_key_exists('harga', $error)) ? 'has-error' : ''; ?>">
                                                 <label class="control-label"></label>
                                                 <input type="number" class="form-control" name="harga" inputmode="numeric" value="<?= $menu['harga']; ?>">
-                                                <span class="help-block">Harga menu dalam Rupiah.</span>
+                                                <span class="help-block"><?= (array_key_exists('harga', $error)) ? $error['harga'] : 'Harga menu dalam Rupiah.'; ?></span>
                                             </div>
                                         </div>
                                     </div>

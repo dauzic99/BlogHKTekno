@@ -12,7 +12,7 @@ class Daerah extends Migration
         $this->forge->addField([
             'daerah_id'  => [
                 'type'           => 'INT',
-                'constraint'     => 5,
+                'constraint'     => 8,
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],

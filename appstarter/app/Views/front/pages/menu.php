@@ -2,7 +2,7 @@
 
 <!-- sidebar -->
 <?= $this->section('sidebar'); ?>
-<section class="ct-sidebar ct-js-sidebar ct-js-background ct-u-displayTable ct-u-hideAnimateBg" data-bg="<?= base_url(); ?>/depan/assets/images/content/full2-menu.jpg">
+<section class="ct-sidebar ct-js-sidebar ct-js-background ct-u-displayTable ct-u-hideAnimateBg" data-bg="<?= base_url(); ?>/image/tampilan/full2-menu.jpg">
     <div class="ct-sidebar-inner">
         <div class="item">
             <hr class="hr-custom ct-js-background animated" data-fx="fadeInDown" data-bg="<?= base_url(); ?>/depan/assets/images/hr2.png" data-bgrepeat="no-repeat">
@@ -28,7 +28,13 @@
         <?php foreach ($jenis as $type) { ?>
             <section class="ct-foodBox">
                 <div class="ct-imageBox ct-u-marginTop5 section" id="<?= $type['nama_jenis']; ?>">
-                    <img src="<?= base_url(); ?>/depan/assets/images/content/menu-1-breakfast.jpg" alt="breakfast" />
+                    <?php
+                    $db      = \Config\Database::connect();
+                    $builder = $db->table('menu');
+                    $query   = $builder->getWhere(['jenis_menu_id' => $type['jenis_menu_id']]);
+                    $menuFirst = $query->getResult();
+                    ?>
+                    <img src="<?= base_url(); ?>/image/menu/<?= $type['slug_jenis']; ?>/<?= $menuFirst[0]->foto; ?>" alt="breakfast" />
                 </div>
                 <h3 class="text-center text-uppercase ct-u-font1 ct-fw-600"><?= $type['nama_jenis']; ?></h3>
                 <hr class="hr-custom ct-js-background" data-bg="<?= base_url(); ?>/depan/assets/images/hr2.png" data-bgrepeat="no-repeat">

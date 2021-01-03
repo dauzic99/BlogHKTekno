@@ -11,7 +11,11 @@
                     </div>
                     <h4 class="card-title">Tambah <?= $jenis_menu['nama_jenis']; ?></h4>
                     <div class="card-content">
-
+                        <?php
+                        $error = array();
+                        if (session()->get('error')) {
+                            $error = session()->get('error');
+                        } ?>
                         <form method="POST" action="<?= base_url(); ?>/admin/menu/<?= $jenis_menu['slug_jenis']; ?>/save" class="form-horizontal" enctype="multipart/form-data">
                             <?= csrf_field(); ?>
                             <input type="hidden" name="jenis_menu_id" value="<?= $jenis_menu['jenis_menu_id']; ?>">
@@ -20,30 +24,30 @@
                                     <div class="row">
                                         <label class="col-sm-2 label-on-left">Nama Menu</label>
                                         <div class="col-sm-10">
-                                            <div class="form-group label-floating is-empty">
+                                            <div class="form-group label-floating is-empty <?= (array_key_exists('nama_menu', $error)) ? 'has-error' : ''; ?>">
                                                 <label class="control-label"></label>
-                                                <input type="text" class="form-control" name="nama_menu">
-                                                <span class="help-block">Nama Menu.</span>
+                                                <input type="text" class="form-control" name="nama_menu" value="<?= old('nama_menu') ?>">
+                                                <span class="help-block"><?= (array_key_exists('nama_menu', $error)) ? $error['nama_menu'] : 'Nama Menu.'; ?></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-2 label-on-left">Deskripsi</label>
                                         <div class="col-sm-10">
-                                            <div class="form-group label-floating is-empty">
+                                            <div class="form-group label-floating is-empty <?= (array_key_exists('deskripsi', $error)) ? 'has-error' : ''; ?>">
                                                 <label class="control-label"></label>
-                                                <textarea name="deskripsi" class="form-control" cols="30" rows="5"></textarea>
-                                                <span class="help-block">Deskripsi singkat tentang menu.</span>
+                                                <textarea name="deskripsi" class="form-control" cols="30" rows="5"><?= old('deskripsi') ?></textarea>
+                                                <span class="help-block"><?= (array_key_exists('deskripsi', $error)) ? $error['deskripsi'] : 'Deskripsi singkat tentang menu.'; ?></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <label class="col-sm-2 label-on-left">Harga</label>
                                         <div class="col-sm-10">
-                                            <div class="form-group label-floating is-empty">
+                                            <div class="form-group label-floating is-empty <?= (array_key_exists('harga', $error)) ? 'has-error' : ''; ?>">
                                                 <label class="control-label">Rp</label>
-                                                <input type="number" class="form-control" name="harga" inputmode="numeric">
-                                                <span class="help-block">Harga menu dalam Rupiah.</span>
+                                                <input type="number" class="form-control" name="harga" inputmode="numeric" value="<?= old('harga') ?>">
+                                                <span class="help-block"><?= (array_key_exists('harga', $error)) ? $error['harga'] : 'Harga menu dalam Rupiah.'; ?></span>
                                             </div>
                                         </div>
                                     </div>
@@ -56,7 +60,7 @@
                                                 <label class="control-label"></label>
                                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                                     <div class="fileinput-new thumbnail">
-                                                        <img src="<?= base_url(); ?>/mdb/assets/img/image_placeholder.jpg" alt="...">
+                                                        <img src="https://via.placeholder.com/900x360">
                                                     </div>
                                                     <div class="fileinput-preview fileinput-exists thumbnail"></div>
                                                     <div>
