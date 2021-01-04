@@ -79,6 +79,7 @@ $routes->post('/admin/daerah/update/(:segment)', 'Daerah::update/$1', ['filter' 
 
 $routes->get('/', 'Front::index');
 $routes->get('/menu', 'Front::menu');
+$routes->get('/contact-us', 'Front::contact');
 $routes->get('/get-menu', 'Order::getMenu');
 $routes->get('/get-daerah', 'Order::getDaerah');
 $routes->post('/add-cart', 'Order::addCart');

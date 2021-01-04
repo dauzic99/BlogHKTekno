@@ -13,7 +13,7 @@
     <meta name="author" content="CreateIT">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url(); ?>/image/logo.png" type="image/x-icon">
     <title><?= $title; ?></title>
 
     <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>\mdb\assets\css\bootstrap.min.css">
@@ -37,7 +37,7 @@
         <div class="ct-mainNav-inner">
             <nav>
                 <a class="ct-mainNav-logo" href="index.html">
-                    <img src="<?= base_url(); ?>/depan/assets/images/content/logo.png" alt="WARJAM Logo">
+                    <img src="<?= base_url(); ?>/image/logo.png" alt="WARJAM Logo">
                 </a>
                 <hr class="hr-custom ct-js-background" data-bg="<?= base_url(); ?>/depan/assets/images/hr1.png">
                 <ul class="ct-mainNav-nav text-uppercase animated" data-fx="fadeIn">
@@ -52,71 +52,28 @@
                         <a href="/menu">Menu</a>
                     </li>
                     <li class="dropdown">
-                        <a href="about.html">About</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="about.html">About</a></li>
-                            <li><a href="booking.html">Booking</a></li>
-                            <li><a href="catering.html">Catering</a></li>
-                        </ul>
+                        <a href="">About</a>
                     </li>
                     <li class="dropdown">
-                        <a href="gallery-masonry.html">Gallery</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="gallery-masonry.html">4 columns</a></li>
-                            <li><a href="gallery-masonry5.html">5 columns</a></li>
-                            <li><a href="gallery-infinite.html">Infinite scroll</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="features.html">Features</a>
+                        <a href="">Gallery</a>
                     </li>
                     <li class="dropdown">
-                        <a href="blog.html">Blog</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="blog.html">Blog List</a></li>
-                            <li><a href="blog-single.html">Blog Single</a></li>
-                        </ul>
+                        <a href="">Blog</a>
                     </li>
                     <li>
-                        <a href="contact.html">Contact</a>
+                        <a href="/contact-us">Contact</a>
                     </li>
+
                 </ul>
                 <hr class="hr-custom ct-js-background" data-bg="<?= base_url(); ?>/depan/assets/images/hr1.png">
             </nav>
-            <div class="ct-mainNav-sidebar">
-                <div class="ct-contactInfo text-uppercase animated" data-fx="fadeInUp">
-                    <h5 class="ct-u-colorMotive ct-u-font3">Location</h5>
-                    <p class="ct-u-font2">
-                        199 Saint Philip<br>
-                        Charleston, SC 2940
-                    </p>
-                </div>
-                <hr class="hr-custom ct-js-background animated" data-fx="fadeIn" data-time="400" data-bg="<?= base_url(); ?>/depan/assets/images/hr2.png" data-bgrepeat="no-repeat">
-                <div class="ct-contactInfo text-uppercase ct-u-paddingBottom30 animated" data-fx="fadeInUp">
-                    <h5 class="ct-u-colorMotive ct-u-font3">We are open</h5>
-                    <p class="ct-u-font2">
-                        Mon—Sat: 6am–6pm<br>
-                        Sunday: 6am–4pm
-                    </p>
-                </div>
-                <ul class="list-unstyled list-inline ct-socials animated" data-fx="fadeInUp" data-time="400">
-                    <li>
-                        <a href="https://www.facebook.com/createITpl" data-toggle="tooltip" data-placement="top" title="Facebook"><i class="fa fa-fw fa-facebook"></i></a>
-                    </li>
-                    <li>
-                        <a href="https://twitter.com/createitpl" data-toggle="tooltip" data-placement="top" title="Twitter"><i class="fa fa-fw fa-twitter"></i></a>
-                    </li>
-                    <li>
-                        <a href="#" data-toggle="tooltip" data-placement="top" title="Google +"><i class="fa fa-fw fa-google-plus"></i></a>
-                    </li>
-                </ul>
-            </div>
+
         </div>
     </div>
 
     <div id="ct-js-wrapper" class="ct-pageWrapper">
         <div class="ct-navbarMobile ct-navbarMobile--inverse">
-            <a class="navbar-brand" href="index.html"><img src="<?= base_url(); ?>/depan/assets/images/content/logo.png" alt="Website Logo"></a>
+            <a class="navbar-brand" href="index.html"></a>
             <button type="button" class="navbar-toggle">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -265,6 +222,9 @@
                         });
 
                         document.getElementById('totalWithOngkir').innerHTML = 'Total Bayar : ' + formatter.format(totalPrice);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.statusText);
                     }
                 })
             });
@@ -424,7 +384,11 @@
                         var link = 'https://api.whatsapp.com/send?phone=62811591002&text=' + data.pesan;
                         var redirectWindow = window.open(link, '_blank');
                         redirectWindow.location;
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.statusText);
                     }
+
                 })
             });
 

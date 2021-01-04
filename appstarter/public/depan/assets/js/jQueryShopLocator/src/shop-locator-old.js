@@ -159,13 +159,13 @@
         //    - infobubble.js https://github.com/googlemaps/js-info-bubble
         loadDependences: function ( constructor, element, settings) {
             if($('#markerclusterer').length === 0){
-                var src="/depan/assets/js/jQueryShopLocator/src/dependences/markerclusterer.js";
+                var src="assets/js/jQueryShopLocator/src/dependences/markerclusterer.js";
                 var sdk = $('<script id="markerclusterer" type="text/javascript"></script>');
                 sdk.attr("src", src);
                 sdk.appendTo($('head'));
             }
             if($('#infobubble').length === 0){
-                var src2="/depan/assets/js/jQueryShopLocator/src/dependences/infobubble.js";
+                var src2="assets/js/jQueryShopLocator/src/dependences/infobubble.js";
                 var sdk2 = $('<script id="infobubble" type="text/javascript"></script>');
                 sdk2.attr("src", src2);
                 sdk2.appendTo($('head'));

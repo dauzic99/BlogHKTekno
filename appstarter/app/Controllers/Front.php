@@ -5,6 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\Controller;
 use App\Models\Model_JenisMenu;
 use App\Models\Model_Menu;
+use App\Models\Model_Contact;
 
 class Front extends Controller
 {
@@ -27,5 +28,16 @@ class Front extends Controller
             'jenis' => $type,
         ];
         echo view('front/pages/menu', $data);
+    }
+
+    public function contact()
+    {
+        $contact = new Model_Contact();
+        $kontak = $contact->first();
+        $data = [
+            'title' => 'Contact Us | WARJAM Restorasi',
+            'contact' => $kontak,
+        ];
+        echo view('front/pages/contact', $data);
     }
 }

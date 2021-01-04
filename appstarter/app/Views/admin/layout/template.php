@@ -161,7 +161,12 @@
                             <p>Pegawai</p>
                         </a>
                     </li>
-
+                    <li class="">
+                        <a href="<?php echo base_url(); ?>">
+                            <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                            <p>Gallery</p>
+                        </a>
+                    </li>
 
                 </ul>
             </div>

@@ -70,39 +70,48 @@ class Order extends Controller
     public function getDaerah()
     {
         if ($this->request->isAJAX()) {
-            $daerah = new Model_Daerah();
-            $zone = $daerah->findAll();
-
-            echo json_encode($zone);
+            if (session()->get('cart')) {
+                $daerah = new Model_Daerah();
+                $zone = $daerah->findAll();
+                return $this->response->setJSON($zone);
+            } else {
+                return $this->response->setStatusCode(500, 'Silahkan pilih menu untuk dipesan terlebih dahulu.');
+            }
         }
     }
 
     public function pesan()
     {
         if ($this->request->isAJAX()) {
-            $menu = new Model_Menu();
-            $daerah = new Model_Daerah();
-
-            $zona = $daerah->find($this->request->getVar('daerah_id'));
             $nama = $this->request->getVar('nama_pemesan');
             $alamat = $this->request->getVar('alamat_pemesan');
+            $tempat = $this->request->getVar('daerah_id');
+            if (!$nama == '' && !$alamat == '' && !$tempat == '') {
+                $menu = new Model_Menu();
+                $daerah = new Model_Daerah();
 
-            $pesan = "Halo Warjam \nAtas Nama :" . $nama . "\nDaerah :" . $zona['nama_daerah'] . "\nAlamat :" . $alamat . "\nMemesan:\n";
-            $cart = $this->request->getVar('cart');
+                $zona = $daerah->find($this->request->getVar('daerah_id'));
 
-            foreach ($cart as $item) {
-                $menus = $menu->find($item['id']);
-                $nama_menu = $menus['nama_menu'];
-                $pesan .= $item['jumlah'] . " " . $nama_menu . "\n";
+
+                $pesan = "Halo Warjam \nAtas Nama :" . $nama . "\nDaerah :" . $zona['nama_daerah'] . "\nAlamat :" . $alamat . "\nMemesan:\n";
+                $cart = $this->request->getVar('cart');
+
+                foreach ($cart as $item) {
+                    $menus = $menu->find($item['id']);
+                    $nama_menu = $menus['nama_menu'];
+                    $pesan .= $item['jumlah'] . " " . $nama_menu . "\n";
+                }
+
+                $msg = [
+                    'sukses' => 'Data berhasil dipesan',
+                    'pesan' => urlencode($pesan),
+                ];
+                $session = session();
+                $session->remove('cart');
+                return $this->response->setJSON($msg);
+            } else {
+                return $this->response->setStatusCode(500, 'Mohon penuhi form identitas berikut terlebih dahulu.');
             }
-
-            $msg = [
-                'sukses' => 'Data berhasil dipesan',
-                'pesan' => urlencode($pesan),
-            ];
-            $session = session();
-            $session->remove('cart');
-            echo json_encode($msg);
         }
     }
 }

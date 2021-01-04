@@ -89,7 +89,7 @@
 
                     // center on resize
                     google.maps.event.addDomListener(window, "resize", function () {
-                        //var userLocation = new google.maps.LatLng(53.8018,-1.553);
+                        var userLocation = new google.maps.LatLng(-1.2530360773134508, 116.76736745433564);
                         setTimeout(function () {
                             $this.gmap3('get').setCenter(atcenter);
                             $this.gmap3('get').panBy(0, offset);

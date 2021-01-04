@@ -2,7 +2,7 @@
 
 <!-- sidebar -->
 <?= $this->section('sidebar'); ?>
-<section class="ct-sidebar ct-js-sidebar ct-js-background ct-u-displayNone ct-big-gallery" data-bg="<?= base_url(); ?>/depan/assets/images/content/full1-home.jpg">
+<section class="ct-sidebar ct-js-sidebar ct-js-background ct-u-displayNone ct-big-gallery" data-bg="<?= base_url(); ?>/image/tampilan/full1-home.jpg">
     <div class="ct-js-owl " data-animations="true" data-height="100%" data-snap-ignore="true">
         <div class="item">
             <hr class="hr-custom ct-js-background animated" data-fx="fadeInDown" data-bg="<?= base_url(); ?>/depan/assets/images/hr2.png" data-bgrepeat="no-repeat">
