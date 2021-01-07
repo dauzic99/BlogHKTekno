@@ -113,14 +113,8 @@
                                 <li>
                                     <a href="">About</a>
                                 </li>
-                                <li>
-                                    <a href="">Contact</a>
-                                </li>
-                                <li>
-                                    <a href="">Social Media</a>
-                                </li>
-                                <li>
-                                    <a href="">General Information</a>
+                                <li class="<?= ($uri->getSegment(1) == 'admin' &&  $uri->getSegment(2) == 'contact' ? 'active' : null) ?>">
+                                    <a href="/admin/contact">Contact</a>
                                 </li>
                             </ul>
                         </div>
@@ -149,8 +143,8 @@
                             <p>Pengeluaran</p>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="<?php echo base_url(); ?>">
+                    <li class="<?= ($uri->getSegment(1) == 'admin' &&  $uri->getSegment(2) == 'secret-menu' ? 'active' : null) ?>">
+                        <a href="<?php echo base_url(); ?>/admin/secret-menu">
                             <i class="fa fa-user-secret" aria-hidden="true"></i>
                             <p>Secret Menu</p>
                         </a>
@@ -165,6 +159,12 @@
                         <a href="<?php echo base_url(); ?>">
                             <i class="fa fa-file-image-o" aria-hidden="true"></i>
                             <p>Gallery</p>
+                        </a>
+                    </li>
+                    <li class="<?= ($uri->getSegment(1) == 'admin' &&  $uri->getSegment(2) == 'meja' ? 'active' : null) ?>">
+                        <a href="<?php echo base_url(); ?>/admin/meja">
+                            <i class="fa fa-bell-o" aria-hidden="true"></i>
+                            <p>Meja</p>
                         </a>
                     </li>
 
@@ -313,6 +313,7 @@
     </div>
 </body>
 
+<?= $this->renderSection('modals'); ?>
 
 <!--   Core JS Files   -->
 <script src="<?php echo base_url(); ?>/mdb/assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>

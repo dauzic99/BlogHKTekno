@@ -34,7 +34,10 @@
                     $query   = $builder->getWhere(['jenis_menu_id' => $type['jenis_menu_id']]);
                     $menuFirst = $query->getResult();
                     ?>
-                    <img src="<?= base_url(); ?>/image/menu/<?= $type['slug_jenis']; ?>/<?= $menuFirst[0]->foto; ?>" alt="breakfast" />
+                    <?php if ($menuFirst) { ?>
+                        <img src="<?= base_url(); ?>/image/menu/<?= $type['slug_jenis']; ?>/<?= $menuFirst[0]->foto; ?>" alt="breakfast" />
+                    <?php } ?>
+
                 </div>
                 <h3 class="text-center text-uppercase ct-u-font1 ct-fw-600"><?= $type['nama_jenis']; ?></h3>
                 <hr class="hr-custom ct-js-background" data-bg="<?= base_url(); ?>/depan/assets/images/hr2.png" data-bgrepeat="no-repeat">

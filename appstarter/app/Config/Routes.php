@@ -39,6 +39,11 @@ $routes->get('admin/user/edit-profile', 'Auth::profile', ['filter' => 'auth']);
 $routes->post('admin/user/edit-profile', 'Auth::editProfile', ['filter' => 'auth']);
 $routes->post('admin/user/edit-password', 'Auth::editPassword', ['filter' => 'auth']);
 
+$routes->get('admin/contact', 'Contact::edit', ['filter' => 'auth']);
+$routes->post('admin/contact/edit-contact', 'Contact::editContact', ['filter' => 'auth']);
+$routes->post('admin/contact/edit-socmed', 'Contact::editSocmed', ['filter' => 'auth']);
+
+
 $routes->get('/admin/pegawai', 'Pegawai::index', ['filter' => 'auth']);
 $routes->get('/admin/pegawai/create', 'Pegawai::create', ['filter' => 'auth']);
 $routes->post('/admin/pegawai/save', 'Pegawai::save', ['filter' => 'auth']);
@@ -65,6 +70,29 @@ $routes->post('/admin/menu/(:segment)/delete', 'Menu::delete', ['filter' => 'aut
 $routes->get('/admin/menu/(:segment)/edit/(:segment)', 'Menu::edit/$1/$2', ['filter' => 'auth']);
 $routes->post('/admin/menu/(:segment)/update/(:segment)', 'Menu::update/$1/$2', ['filter' => 'auth']);
 
+//secret menu
+$routes->get('/admin/secret-menu', 'Secret_Jenis::index', ['filter' => 'auth']);
+$routes->post('/admin/secret-menu/delete', 'Secret_Jenis::delete', ['filter' => 'auth']);
+$routes->get('/admin/secret-menu/create', 'Secret_Jenis::create', ['filter' => 'auth']);
+$routes->get('/admin/secret-menu/edit/(:segment)', 'Secret_Jenis::edit/$1', ['filter' => 'auth']);
+$routes->post('/admin/secret-menu/update/(:segment)', 'Secret_Jenis::update/$1', ['filter' => 'auth']);
+$routes->post('/admin/secret-menu/save', 'Secret_Jenis::save', ['filter' => 'auth']);
+
+$routes->get('/admin/secret-menu/(:segment)', 'Secret::index/$1', ['filter' => 'auth']);
+$routes->get('/admin/secret-menu/(:segment)/create', 'Secret::create/$1', ['filter' => 'auth']);
+$routes->post('/admin/secret-menu/(:segment)/save', 'Secret::save', ['filter' => 'auth']);
+$routes->post('/admin/secret-menu/(:segment)/delete', 'Secret::delete', ['filter' => 'auth']);
+$routes->get('/admin/secret-menu/(:segment)/edit/(:segment)', 'Secret::edit/$1/$2', ['filter' => 'auth']);
+$routes->post('/admin/secret-menu/(:segment)/update/(:segment)', 'Secret::update/$1/$2', ['filter' => 'auth']);
+
+$routes->get('/admin/meja', 'Meja::index', ['filter' => 'auth']);
+$routes->post('/admin/meja/delete', 'Meja::delete', ['filter' => 'auth']);
+$routes->get('/admin/meja/create', 'Meja::create', ['filter' => 'auth']);
+$routes->post('/admin/meja/save', 'Meja::save', ['filter' => 'auth']);
+$routes->get('/admin/meja/edit/(:segment)', 'Meja::edit/$1', ['filter' => 'auth']);
+$routes->post('/admin/meja/update/(:segment)', 'Meja::update/$1', ['filter' => 'auth']);
+$routes->post('/admin/meja/getQR', 'Meja::getQR', ['filter' => 'auth']);
+
 
 $routes->get('/admin/daerah', 'Daerah::index', ['filter' => 'auth']);
 $routes->post('/admin/daerah/delete', 'Daerah::delete', ['filter' => 'auth']);
@@ -83,8 +111,17 @@ $routes->get('/contact-us', 'Front::contact');
 $routes->get('/get-menu', 'Order::getMenu');
 $routes->get('/get-daerah', 'Order::getDaerah');
 $routes->post('/add-cart', 'Order::addCart');
+$routes->post('/add-cart-secret', 'Order::addCartSecret');
 $routes->post('/delete-cart', 'Order::deleteCart');
+$routes->post('/delete-cart-secret', 'Order::deleteCartSecret');
 $routes->post('/order', 'Order::pesan');
+
+$routes->post('/order-secret', 'Order::pesanSecret');
+$routes->get('/secret/(:segment)', 'Front::secret/$1');
+
+$routes->get('/cekSession', 'Front::cek');
+
+
 
 
 

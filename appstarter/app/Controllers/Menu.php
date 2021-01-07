@@ -141,7 +141,7 @@ class Menu extends Controller
         } else {
             if ($this->request->getFile('foto')->isReadable()) {
                 //hapus file gambar sebelumnya di directory
-                $path = 'image/menu/' . $type['nama_jenis'] . '/' . $menus['foto'];
+                $path = 'image/menu/' . $type['slug_jenis'] . '/' . $menus['foto'];
                 unlink($path);
 
                 $folder = $jenis->where('jenis_menu_id', $id_jenis)->first();

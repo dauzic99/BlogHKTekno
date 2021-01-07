@@ -30,6 +30,9 @@
 </head>
 
 <body class="cssAnimate ptn13">
+    <?php
+    $uri = service('uri');
+    ?>
     <div class="ct-preloader">
         <div class="ct-preloader-content"></div>
     </div>
@@ -45,10 +48,10 @@
                         <button class="btn btn-lg btn-button--brown checkout">CHECKOUT</button>
                     </li>
                     <hr class="hr-custom ct-js-background" data-bg="<?= base_url(); ?>/depan/assets/images/hr1.png">
-                    <li class="">
+                    <li class="<?= ($uri->getSegment(1) == '' ? 'active' : null) ?>">
                         <a href="/">Home</a>
                     </li>
-                    <li>
+                    <li class="<?= ($uri->getSegment(1) == 'menu' ? 'active' : null) ?>">
                         <a href="/menu">Menu</a>
                     </li>
                     <li class="dropdown">
@@ -60,7 +63,7 @@
                     <li class="dropdown">
                         <a href="">Blog</a>
                     </li>
-                    <li>
+                    <li class="<?= ($uri->getSegment(1) == 'contact-us' ? 'active' : null) ?>">
                         <a href="/contact-us">Contact</a>
                     </li>
 
@@ -207,28 +210,83 @@
 
             //button identity
             $(document).on('click', '#goToOngkir', function() {
-                $.ajax({
-                    type: 'GET',
-                    url: "/get-daerah",
-                    dataType: "json",
-                    success: function(data) {
-                        $('#myModal2').modal('show');
+                var nomor_meja = '<?= session()->nomor_meja; ?>';
 
-                        $('#daerah_pemesan').empty();
-                        document.getElementById('daerah_pemesan').innerHTML += '<option value="" data-id="" disabled selected>Pilih Daerah Kamu</option>';
+                if (!nomor_meja == '') {
+                    console.log(nomor_meja);
 
-                        $.each(data, function(key, value) {
-                            document.getElementById('daerah_pemesan').innerHTML += '<option value="' + data[key]['daerah_id'] + '" data-id="' + key + '" data-cost="' + data[key]['ongkos'] + '">' + data[key]['nama_daerah'] + '</option>';
-                        });
+                    //cart biasa
+                    var cart = [];
+                    $(".item-cart").each(function(i) {
+                        var jumlah = $(this).find('input:text.quantity_val').val();
+                        var id = $(this).data('id');
+                        var item = {
+                            id: id,
+                            jumlah: jumlah,
+                        };
+                        cart.push(item);
 
-                        document.getElementById('totalWithOngkir').innerHTML = 'Total Bayar : ' + formatter.format(totalPrice);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert(jqXHR.statusText);
-                    }
-                })
+                    });
+
+                    //cart secret
+                    var secret = [];
+                    $(".item-cart-secret").each(function(i) {
+                        var jumlah = $(this).find('input:text.quantity_val').val();
+                        var id = $(this).data('id');
+                        var item = {
+                            id: id,
+                            jumlah: jumlah,
+                        };
+                        secret.push(item);
+
+                    });
+                    console.log('sampe sini');
+                    $.ajax({
+                        type: 'POST',
+                        url: "/order-secret",
+                        data: {
+                            cart: cart,
+                            secret: secret,
+                            nomor_meja: nomor_meja,
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            $('#modalMenu').modal('toggle');
+                            var link = 'https://api.whatsapp.com/send?phone=62811591002&text=' + data.pesan;
+                            var redirectWindow = window.open(link, '_blank');
+                            redirectWindow.location;
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(jqXHR.statusText);
+                        }
+
+                    })
+                } else {
+                    $.ajax({
+                        type: 'GET',
+                        url: "/get-daerah",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#myModal2').modal('show');
+
+                            $('#daerah_pemesan').empty();
+                            document.getElementById('daerah_pemesan').innerHTML += '<option value="" data-id="" disabled selected>Pilih Daerah Kamu</option>';
+
+                            $.each(data, function(key, value) {
+                                document.getElementById('daerah_pemesan').innerHTML += '<option value="' + data[key]['daerah_id'] + '" data-id="' + key + '" data-cost="' + data[key]['ongkos'] + '">' + data[key]['nama_daerah'] + '</option>';
+                            });
+
+                            document.getElementById('totalWithOngkir').innerHTML = 'Total Bayar : ' + formatter.format(totalPrice);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            alert(jqXHR.statusText);
+                        }
+                    })
+                }
+
             });
             var item;
+            var secret;
             // button checkout inc
             $(document).on('click', '.checkout', function() {
                 $.ajax({
@@ -237,6 +295,7 @@
                     dataType: "json",
                     success: function(data) {
                         item = data.cart;
+                        secret = data.secret;
                         $('#shopping-cart').empty();
                         $.each(item, function(key, value) {
                             document.getElementById('shopping-cart').innerHTML += '<div class="item-cart" data-id="' + item[key]['id'] + '">' +
@@ -260,6 +319,28 @@
                                 '</div>';
                         });
 
+                        $.each(secret, function(key, value) {
+                            document.getElementById('shopping-cart').innerHTML += '<div class="item-cart-secret" data-id="' + secret[key]['id'] + '">' +
+                                '<div class="buttons-cart" id="delete-cart-secret" data-id="' + key + '">' +
+                                '<span class="delete-btn fa fa-times"></span>' +
+                                '</div>' +
+                                '<div class="description">' +
+                                '<p id="nama-menu">' + secret[key]['nama'] + '</p>' +
+                                '<span id="deskripsi-menu">' + secret[key]['deskripsi'] + '</span>' +
+                                '</div>' +
+                                '<div class="quantity" id="jumlahPesanan">' +
+                                '<button class="button-quantity minus-btn-secret" type="button" name="button" data-id="' + key + '">' +
+                                '-' +
+                                '</button>' +
+                                '<input type="text" name="quantity" value="1" class="quantity_val" disabled>' +
+                                '<button class="button-quantity plus-btn-secret" type="button" name="button" data-id="' + key + '">' +
+                                '+' +
+                                '</button>' +
+                                '</div>' +
+                                '<div class="total-price" id="harga' + key + '">' + formatter.format(secret[key]['harga']) + '</div>' +
+                                '</div>';
+                        });
+
                         $('#modalMenu').modal('show');
                         totalPrice = 0;
                         $(".total-price").each(function(i) {
@@ -279,6 +360,27 @@
                 $.ajax({
                     type: 'POST',
                     url: "/delete-cart",
+                    data: {
+                        id: id,
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        alert(data.sukses);
+                        $(".close").click();
+                        setTimeout(function() {
+                            $(".checkout").click();
+                        }, 1000);
+
+
+                    }
+                })
+            });
+
+            $(document).on('click', '#delete-cart-secret', function() {
+                var id = $(this).data('id');
+                $.ajax({
+                    type: 'POST',
+                    url: "/delete-cart-secret",
                     data: {
                         id: id,
                     },
@@ -336,6 +438,60 @@
                 }
                 $input.val(value);
                 harga = item[id]['harga'];
+                var total = value * harga;
+                $('#harga' + id).text(formatter.format(total));
+
+                totalPrice = 0;
+                $(".total-price").each(function(i) {
+                    var sd = $(this).html().replace(/[^0-9]/gi, '');
+                    var price = parseInt(sd, 10);
+                    totalPrice += price;
+                });
+                document.getElementById('totalHarga').innerHTML = 'Total Harga : ' + formatter.format(totalPrice);
+            });
+
+
+            $(document).on("click", ".minus-btn-secret", function() {
+                var harga;
+                var $this = $(this);
+                var id = $(this).data('id');
+                var $input = $this.closest('div').find('input');
+                var value = parseInt($input.val());
+
+                if (value > 1) {
+                    value = value - 1;
+                } else {
+                    value = 1;
+                }
+
+                $input.val(value);
+                harga = secret[id]['harga'];
+                var total = value * harga;
+                $('#harga' + id).text(formatter.format(total));
+
+                totalPrice = 0;
+                $(".total-price").each(function(i) {
+                    var sd = $(this).html().replace(/[^0-9]/gi, '');
+                    var price = parseInt(sd, 10);
+                    totalPrice += price;
+                });
+                document.getElementById('totalHarga').innerHTML = 'Total Harga : ' + formatter.format(totalPrice);
+            });
+
+            $(document).on("click", ".plus-btn-secret", function() {
+                var harga;
+                var $this = $(this);
+                var id = $(this).data('id');
+                var $input = $this.closest('div').find('input');
+                var value = parseInt($input.val());
+
+                if (value <= 100) {
+                    value = value + 1;
+                } else {
+                    value = 100;
+                }
+                $input.val(value);
+                harga = secret[id]['harga'];
                 var total = value * harga;
                 $('#harga' + id).text(formatter.format(total));
 

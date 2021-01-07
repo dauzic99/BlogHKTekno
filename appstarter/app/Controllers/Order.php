@@ -6,6 +6,8 @@ use CodeIgniter\Controller;
 use App\Models\Model_Menu;
 use App\Models\Model_JenisMenu;
 use App\Models\Model_Daerah;
+use App\Models\Model_SecretJenis;
+use App\Models\Model_SecretMenu;
 
 class Order extends Controller
 {
@@ -41,6 +43,38 @@ class Order extends Controller
         }
     }
 
+    public function addCartSecret()
+    {
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getVar('id');
+
+            $session = session();
+            if (!$session->has('secret')) {
+                $session->set('secret', array());
+            }
+
+            $menu = new Model_SecretMenu();
+            $menus = $menu->find($id);
+            $jenis = new Model_SecretJenis();
+
+            $key = 'menu_' . $id;
+
+            $cart = array(
+                $key => array(
+                    'id' => $id,
+                    'nama' => $menus['nama_menu'],
+                    'deskripsi' => $menus['deskripsi'],
+                    'harga' => $menus['harga'],
+                ),
+            );
+            $session->push('secret', $cart);
+            $msg = [
+                'sukses' => 'Data berhasil ditambah ke cart'
+            ];
+            echo json_encode($msg);
+        }
+    }
+
     public function deleteCart()
     {
         if ($this->request->isAJAX()) {
@@ -56,12 +90,28 @@ class Order extends Controller
         }
     }
 
+    public function deleteCartSecret()
+    {
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getVar('id');
+            $session = session();
+            if ($session->has('secret')) {
+                unset($_SESSION['secret'][$id]);
+                $msg = [
+                    'sukses' => 'Data berhasil dihapus dari cart'
+                ];
+                echo json_encode($msg);
+            }
+        }
+    }
+
     public function getMenu()
     {
         if ($this->request->isAJAX()) {
             $session = session();
             $data = [
                 'cart' => $session->cart,
+                'secret' => $session->secret
             ];
             echo json_encode($data);
         }
@@ -112,6 +162,46 @@ class Order extends Controller
             } else {
                 return $this->response->setStatusCode(500, 'Mohon penuhi form identitas berikut terlebih dahulu.');
             }
+        }
+    }
+
+    public function pesanSecret()
+    {
+        if ($this->request->isAJAX()) {
+            $menu = new Model_Menu();
+            $menu_secret = new Model_SecretMenu();
+            $nomor_meja = $this->request->getVar('nomor_meja');
+
+
+            $pesan = "Halo Warjam \nMeja Nomor : " . $nomor_meja . "\nMemesan:\n";
+
+            $cart = $this->request->getVar('cart');
+
+            if ($cart) {
+                foreach ($cart as $item) {
+                    $menus = $menu->find($item['id']);
+                    $nama_menu = $menus['nama_menu'];
+                    $pesan .= $item['jumlah'] . " " . $nama_menu . "\n";
+                }
+            }
+
+            //secret
+            $secret = $this->request->getVar('secret');
+            foreach ($secret as $item) {
+                $menus = $menu_secret->find($item['id']);
+                $nama_menu = $menus['nama_menu'];
+                $pesan .= $item['jumlah'] . " " . $nama_menu . "\n";
+            }
+
+            $msg = [
+                'sukses' => 'Data berhasil dipesan',
+                'pesan' => urlencode($pesan),
+            ];
+            $session = session();
+            $session->remove('cart');
+            $session->remove('secret');
+            $session->remove('nomor_meja');
+            return $this->response->setJSON($msg);
         }
     }
 }
